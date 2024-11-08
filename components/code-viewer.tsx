@@ -27,12 +27,12 @@ export default function CodeViewer({
   }
 
   return (
-    <div className={`relative rounded-lg overflow-hidden ${isFullscreen ? 'fixed inset-0 z-50' : 'h-[80vh]'}`}>
+    <div className={`relative rounded-lg overflow-hidden ${isFullscreen ? 'fixed inset-0 z-50' : 'h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh]'}`}>
       {showEditor ? (
         <Sandpack
           options={{
             showNavigator: true,
-            editorHeight: isFullscreen ? "100vh" : "80vh",
+            editorHeight: isFullscreen ? "100vh" : "calc(100vh - 4rem)",
             showTabs: false,
             ...sharedOptions,
           }}
@@ -53,24 +53,24 @@ export default function CodeViewer({
           {...sharedProps}
         >
           <Tabs defaultValue="preview" className="w-full h-full">
-            <div className="flex justify-between items-center p-2 bg-gray-50 border-b border-gray-200">
-              <TabsList className="bg-white shadow-sm">
-                <TabsTrigger value="preview" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">Preview</TabsTrigger>
-                <TabsTrigger value="code" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">Code</TabsTrigger>
+            <div className="flex flex-col sm:flex-row justify-between items-center p-2 bg-gray-50 border-b border-gray-200">
+              <TabsList className="bg-white shadow-sm w-full sm:w-auto mb-2 sm:mb-0">
+                <TabsTrigger value="preview" className="text-xs sm:text-sm data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">Preview</TabsTrigger>
+                <TabsTrigger value="code" className="text-xs sm:text-sm data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">Code</TabsTrigger>
               </TabsList>
-              <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
+              <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="w-full sm:w-auto">
                 {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
               </Button>
             </div>
             <TabsContent value="preview" className="mt-0 h-full">
               <SandpackPreview
-                className="flex h-full w-full grow flex-col justify-center p-4 md:pt-16 bg-white"
+                className="flex h-full w-full grow flex-col justify-center p-2 sm:p-4 md:pt-8 lg:pt-16 bg-white"
                 showOpenInCodeSandbox={false}
                 showRefreshButton={false}
               />
             </TabsContent>
             <TabsContent value="code" className="mt-0 h-full">
-              <pre className="p-4 bg-white text-gray-800 overflow-auto h-full font-mono text-sm leading-relaxed">
+              <pre className="p-2 sm:p-4 bg-white text-gray-800 overflow-auto h-full font-mono text-xs sm:text-sm leading-relaxed">
                 <code>{code}</code>
               </pre>
             </TabsContent>

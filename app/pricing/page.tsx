@@ -49,10 +49,16 @@ export default function PricingPage() {
   
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setParticles(Array.from({ length: 20 }).map(() => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight
-      })));
+      const handleResize = () => {
+        setParticles(Array.from({ length: 20 }).map(() => ({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight
+        })));
+      };
+
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
 
@@ -93,17 +99,17 @@ export default function PricingPage() {
         ))}
       </div>
 
-      <div className="py-20">
+      <div className="py-8 sm:py-12 md:py-20">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="container mx-auto px-4"
+          className="container mx-auto px-4 sm:px-6 lg:px-8"
         >
-          <div className="text-center mb-16">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <motion.h1 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-4xl font-bold mb-4 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent"
             >
               Simple, transparent pricing
             </motion.h1>
@@ -111,51 +117,51 @@ export default function PricingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-gray-600"
+              className="text-gray-600 text-sm sm:text-base"
             >
               Choose the perfect plan for your needs
             </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
             {pricingPlans.map((plan, index) => (
               <motion.div
                 key={plan.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`bg-white/90 backdrop-blur-xl rounded-2xl p-8 shadow-lg border-2 ${
+                className={`bg-white/90 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-lg border-2 ${
                   plan.popular ? 'border-sky-500' : 'border-gray-200'
                 }`}
               >
                 {plan.popular && (
-                  <span className="bg-sky-500 text-white px-3 py-1 rounded-full text-sm font-medium mb-4 inline-block">
+                  <span className="bg-sky-500 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-medium mb-3 sm:mb-4 inline-block">
                     Most Popular
                   </span>
                 )}
-                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  {plan.price !== "Custom" && <span className="text-gray-600">/month</span>}
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">{plan.name}</h3>
+                <div className="mb-3 sm:mb-4">
+                  <span className="text-3xl sm:text-4xl font-bold">{plan.price}</span>
+                  {plan.price !== "Custom" && <span className="text-gray-600 text-sm sm:text-base">/month</span>}
                 </div>
-                <p className="text-gray-600 mb-6">{plan.description}</p>
+                <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">{plan.description}</p>
                 <Button 
-                  className={`w-full mb-6 ${
+                  className={`w-full mb-4 sm:mb-6 text-sm sm:text-base ${
                     plan.popular ? 'bg-sky-500 hover:bg-sky-600' : ''
                   }`}
                 >
                   Get Started
                 </Button>
-                <ul className="space-y-3">
+                <ul className="space-y-2 sm:space-y-3">
                   {plan.features.map((feature, i) => (
                     <motion.li 
                       key={i}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 + i * 0.1 }}
-                      className="flex items-center gap-2 text-gray-600"
+                      className="flex items-center gap-2 text-gray-600 text-sm sm:text-base"
                     >
-                      <Check className="h-5 w-5 text-sky-500" />
+                      <Check className="h-4 w-4 sm:h-5 sm:w-5 text-sky-500 flex-shrink-0" />
                       {feature}
                     </motion.li>
                   ))}

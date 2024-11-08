@@ -229,24 +229,24 @@ export default function Component() {
               ease: "easeInOut"
             }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500">
               Design to Code Magic
             </h1>
           </motion.div>
           <motion.p 
-            className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
             Transform your designs into production-ready React components instantly with our AI-powered platform.
-            <span className="block mt-2 text-lg text-gray-500">
+            <span className="block mt-2 text-base sm:text-lg text-gray-500">
               No coding experience required - just upload your design and let AI do the magic!
             </span>
           </motion.p>
           
           <motion.div 
-            className="mt-12 flex flex-wrap justify-center gap-6"
+            className="mt-12 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -254,10 +254,10 @@ export default function Component() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button 
                 size="lg"
-                className="bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white px-10 py-6 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+                className="w-full sm:w-auto bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
               >
                 Start Creating Now
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5 group-hover:translate-x-2 transition-transform" />
               </Button>
             </motion.div>
             
@@ -265,7 +265,7 @@ export default function Component() {
               <Button 
                 size="lg"
                 variant="outline"
-                className="px-10 py-6 text-lg font-semibold rounded-full border-2 hover:bg-gray-50 flex items-center gap-3"
+                className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-lg font-semibold rounded-full border-2 hover:bg-gray-50 flex items-center justify-center gap-3"
               >
                 <motion.div
                   animate={{ scale: [1, 1.2, 1] }}
@@ -281,28 +281,28 @@ export default function Component() {
 
           {/* Trust badges */}
           <motion.div 
-            className="mt-16 flex flex-wrap justify-center gap-8 items-center"
+            className="mt-16 flex flex-wrap justify-center gap-4 sm:gap-8 items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
             <motion.div whileHover={{ scale: 1.1, y: -5 }} transition={{ type: "spring" }}>
-              <Badge variant="secondary" className="px-6 py-3 text-base font-medium shadow-md">
+              <Badge variant="secondary" className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium shadow-md">
                 ⚡️ 10x Faster Development
               </Badge>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1, y: -5 }} transition={{ type: "spring" }}>
-              <Badge variant="secondary" className="px-6 py-3 text-base font-medium shadow-md">
+              <Badge variant="secondary" className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium shadow-md">
                 🛡️ Enterprise Ready
               </Badge>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1, y: -5 }} transition={{ type: "spring" }}>
-              <Badge variant="secondary" className="px-6 py-3 text-base font-medium shadow-md">
+              <Badge variant="secondary" className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium shadow-md">
                 🌟 4.9/5 Rating (2000+ Reviews)
               </Badge>
             </motion.div>
             <motion.div whileHover={{ scale: 1.1, y: -5 }} transition={{ type: "spring" }}>
-              <Badge variant="secondary" className="px-6 py-3 text-base font-medium shadow-md">
+              <Badge variant="secondary" className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium shadow-md">
                 🔒 100% Secure & Private
               </Badge>
             </motion.div>
@@ -310,13 +310,13 @@ export default function Component() {
         </motion.div>
 
         <motion.div 
-          className="grid md:grid-cols-2 gap-12 items-center mb-24"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center mb-24"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Upload Section */}
-          <motion.div variants={itemVariants} className="space-y-8">
+          <motion.div variants={itemVariants} className="space-y-6 sm:space-y-8">
             <Card
               className={`relative overflow-hidden border-2 ${
                 isDragging ? "border-sky-500 scale-[1.02]" : "border-gray-200"
@@ -327,7 +327,7 @@ export default function Component() {
               onDrop={handleDrop}
             >
               <motion.div 
-                className="p-12 flex flex-col items-center justify-center gap-6 text-center min-h-[400px]"
+                className="p-6 sm:p-12 flex flex-col items-center justify-center gap-4 sm:gap-6 text-center min-h-[300px] sm:min-h-[400px]"
                 whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
@@ -335,18 +335,18 @@ export default function Component() {
                   <motion.img 
                     src={uploadedImage} 
                     alt="Uploaded design" 
-                    className="max-w-full max-h-[300px] object-contain rounded-lg shadow-lg"
+                    className="max-w-full max-h-[200px] sm:max-h-[300px] object-contain rounded-lg shadow-lg"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: "spring", stiffness: 200 }}
                   />
                 ) : (
                   <motion.div
-                    className="flex flex-col items-center gap-6"
+                    className="flex flex-col items-center gap-4 sm:gap-6"
                     whileHover={{ scale: 1.05 }}
                   >
                     <motion.div 
-                      className="rounded-full bg-sky-100 p-6"
+                      className="rounded-full bg-sky-100 p-4 sm:p-6"
                       animate={{
                         boxShadow: [
                           "0 0 0 0 rgba(56,189,248,0.4)",
@@ -358,13 +358,13 @@ export default function Component() {
                         repeat: Infinity,
                       }}
                     >
-                      <Upload className="h-12 w-12 text-sky-500" />
+                      <Upload className="h-8 w-8 sm:h-12 sm:w-12 text-sky-500" />
                     </motion.div>
                     <div>
-                      <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
+                      <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
                         Drag & Drop Your Design
                       </h3>
-                      <p className="text-gray-600 text-lg">
+                      <p className="text-base sm:text-lg text-gray-600">
                         Support for Figma, Sketch, or any image format
                       </p>
                     </div>
@@ -375,7 +375,7 @@ export default function Component() {
 
             <div className="space-y-4">
               <Select defaultValue="gemini">
-                <SelectTrigger className="w-full bg-white/90 backdrop-blur-xl border-2 border-gray-200 text-gray-900 h-14 text-lg rounded-xl">
+                <SelectTrigger className="w-full bg-white/90 backdrop-blur-xl border-2 border-gray-200 text-gray-900 h-12 sm:h-14 text-base sm:text-lg rounded-xl">
                   <SelectValue placeholder="Select AI Model" />
                 </SelectTrigger>
                 <SelectContent className="bg-white/90 backdrop-blur-xl border-2 border-gray-200 text-gray-900">
@@ -392,7 +392,7 @@ export default function Component() {
                 <Button
                   onClick={handleGenerate}
                   disabled={isLoading || !uploadedImage}
-                  className="w-full h-14 text-lg font-semibold relative overflow-hidden group bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 hover:from-sky-600 hover:via-indigo-600 hover:to-purple-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="w-full h-12 sm:h-14 text-base sm:text-lg font-semibold relative overflow-hidden group bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 hover:from-sky-600 hover:via-indigo-600 hover:to-purple-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <motion.span 
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -407,9 +407,9 @@ export default function Component() {
                   />
                   <span className="relative flex items-center justify-center gap-2">
                     {isLoading ? (
-                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      <div className="h-4 w-4 sm:h-5 sm:w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                     ) : (
-                      <Sparkles className="h-5 w-5" />
+                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                     )}
                     {isLoading ? "Generating..." : "Generate App"}
                   </span>
@@ -430,10 +430,10 @@ export default function Component() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 border-2 border-gray-200 shadow-xl"
+                  className="bg-white/90 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border-2 border-gray-200 shadow-xl"
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
+                    <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
                       Generated Code
                     </h3>
                     <div className="flex gap-2">
@@ -454,7 +454,7 @@ export default function Component() {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <pre className="bg-gray-50 p-6 rounded-xl text-sm overflow-x-auto">
+                    <pre className="bg-gray-50 p-4 sm:p-6 rounded-xl text-xs sm:text-sm overflow-x-auto">
                       <code>{generatedCode}</code>
                     </pre>
                   </motion.div>
@@ -465,15 +465,15 @@ export default function Component() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="bg-white/90 backdrop-blur-xl rounded-2xl p-8 border-2 border-gray-200 shadow-xl"
+                  className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 sm:p-8 border-2 border-gray-200 shadow-xl"
                 >
                   <Tabs defaultValue="how-it-works" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 mb-8">
+                    <TabsList className="grid w-full grid-cols-2 mb-6 sm:mb-8">
                       <TabsTrigger value="how-it-works">How It Works</TabsTrigger>
                       <TabsTrigger value="features">Features</TabsTrigger>
                     </TabsList>
                     <TabsContent value="how-it-works">
-                      <motion.div className="space-y-4">
+                      <motion.div className="space-y-3 sm:space-y-4">
                         {[
                           "Upload your design screenshot or mockup",
                           "Select your preferred AI model",
@@ -485,19 +485,19 @@ export default function Component() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                            className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
                           >
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 flex items-center justify-center text-white font-bold">
+                            <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm sm:text-base">
                               {index + 1}
                             </div>
-                            <p className="text-gray-700">{step}</p>
+                            <p className="text-sm sm:text-base text-gray-700">{step}</p>
                           </motion.div>
                         ))}
                       </motion.div>
                     </TabsContent>
                     <TabsContent value="features">
-                      <div className="space-y-4">
-                        <div className="grid gap-4">
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="grid gap-3 sm:gap-4">
                           {[
                             "🎨 Advanced Design Recognition",
                             "⚡️ Real-time Preview",
@@ -509,7 +509,7 @@ export default function Component() {
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: index * 0.1 }}
-                              className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                              className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors text-sm sm:text-base"
                             >
                               {feature}
                             </motion.div>
@@ -530,12 +530,12 @@ export default function Component() {
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="py-16"
+          className="py-12 sm:py-16"
         >
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
             Why Choose Buildfy?
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -547,13 +547,13 @@ export default function Component() {
                 animate={inView ? "visible" : "hidden"}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-                className={`bg-white/90 backdrop-blur-xl rounded-2xl p-8 border-2 border-gray-200 shadow-xl hover:shadow-2xl transition-all duration-300 ${
+                className={`bg-white/90 backdrop-blur-xl rounded-2xl p-6 sm:p-8 border-2 border-gray-200 shadow-xl hover:shadow-2xl transition-all duration-300 ${
                   activeFeature === index ? 'ring-2 ring-sky-500' : ''
                 }`}
               >
-                <feature.icon className={`h-12 w-12 ${feature.color} mb-6`} />
-                <h3 className="text-xl font-bold mb-3 text-gray-900">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <feature.icon className={`h-8 w-8 sm:h-12 sm:w-12 ${feature.color} mb-4 sm:mb-6`} />
+                <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900">{feature.title}</h3>
+                <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -561,15 +561,15 @@ export default function Component() {
 
         {/* Testimonials Section */}
         <motion.section
-          className="py-16"
+          className="py-12 sm:py-16"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
             What Our Users Say
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             <AnimatePresence mode="wait">
               {testimonials.map((testimonial, index) => (
                 <motion.div
@@ -578,20 +578,20 @@ export default function Component() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.5 }}
-                  className="bg-white/90 backdrop-blur-xl rounded-2xl p-8 border-2 border-gray-200 shadow-xl"
+                  className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 sm:p-8 border-2 border-gray-200 shadow-xl"
                 >
-                  <div className="flex items-center gap-4 mb-6">
+                  <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}
-                      className="w-12 h-12 rounded-full"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
                     />
                     <div>
-                      <h3 className="font-bold text-gray-900">{testimonial.name}</h3>
-                      <p className="text-sm text-gray-600">{testimonial.role} at {testimonial.company}</p>
+                      <h3 className="font-bold text-gray-900 text-sm sm:text-base">{testimonial.name}</h3>
+                      <p className="text-xs sm:text-sm text-gray-600">{testimonial.role} at {testimonial.company}</p>
                     </div>
                   </div>
-                  <p className="text-gray-600 italic">{testimonial.content}</p>
+                  <p className="text-sm sm:text-base text-gray-600 italic">{testimonial.content}</p>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -600,7 +600,7 @@ export default function Component() {
 
         {/* Newsletter Section */}
         <motion.section
-          className="py-16"
+          className="py-12 sm:py-16"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
