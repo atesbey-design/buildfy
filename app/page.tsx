@@ -87,15 +87,20 @@ export default function DemoComponent() {
 export default function Component() {
   const [isDragging, setIsDragging] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [uploadedImage, setUploadedImage] = useState<string | null>(demoImage)
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const [generatedCode, setGeneratedCode] = useState<string | null>(null)
-  const [showDemo, setShowDemo] = useState(true)
+  const [showDemo, setShowDemo] = useState(false)
   const [activeFeature, setActiveFeature] = useState(0)
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
   })
+
+  useEffect(() => {
+    setUploadedImage(demoImage)
+    setShowDemo(true)
+  }, [])
 
   useEffect(() => {
     if (showDemo) {
@@ -246,7 +251,7 @@ export default function Component() {
           </motion.p>
           
           <motion.div 
-            className="mt-12 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6"
+            className="mt-8 sm:mt-12 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -255,6 +260,7 @@ export default function Component() {
               <Button 
                 size="lg"
                 className="w-full sm:w-auto bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+                onClick={() => window.location.href = '/buildfy'}
               >
                 Start Creating Now
                 <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5 group-hover:translate-x-2 transition-transform" />
@@ -281,7 +287,7 @@ export default function Component() {
 
           {/* Trust badges */}
           <motion.div 
-            className="mt-16 flex flex-wrap justify-center gap-4 sm:gap-8 items-center"
+            className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-8 items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
@@ -310,7 +316,7 @@ export default function Component() {
         </motion.div>
 
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center mb-24"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center mb-16 sm:mb-24"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -432,8 +438,8 @@ export default function Component() {
                   exit={{ opacity: 0, x: -20 }}
                   className="bg-white/90 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border-2 border-gray-200 shadow-xl"
                 >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
-                    <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
+                    <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent mb-2 sm:mb-0">
                       Generated Code
                     </h3>
                     <div className="flex gap-2">
@@ -535,7 +541,7 @@ export default function Component() {
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
             Why Choose Buildfy?
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -551,7 +557,7 @@ export default function Component() {
                   activeFeature === index ? 'ring-2 ring-sky-500' : ''
                 }`}
               >
-                <feature.icon className={`h-8 w-8 sm:h-12 sm:w-12 ${feature.color} mb-4 sm:mb-6`} />
+                <feature.icon className={`h-10 w-10 sm:h-12 sm:w-12 ${feature.color} mb-4 sm:mb-6`} />
                 <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900">{feature.title}</h3>
                 <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
               </motion.div>
@@ -569,7 +575,7 @@ export default function Component() {
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent">
             What Our Users Say
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <AnimatePresence mode="wait">
               {testimonials.map((testimonial, index) => (
                 <motion.div
@@ -600,7 +606,7 @@ export default function Component() {
 
         {/* Newsletter Section */}
         <motion.section
-          className="py-12 sm:py-16"
+          className="py-16"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
