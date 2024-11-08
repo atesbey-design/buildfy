@@ -7,6 +7,8 @@ import Logo from "@/public/buildfy.png";
 import { Button } from "@/components/ui/button";
 import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import PlausibleProvider from "next-plausible";
+import { Sparkles } from "lucide-react";
+import { Github, Twitter } from "lucide-react";
 
 let title = "Buildfy – Screenshot to code";
 let description = "Generate your next app with a screenshot";
@@ -60,48 +62,63 @@ export default function RootLayout({
         <link rel="icon" href={favicon} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full flex flex-col font-sans bg-[#011627] text-[#d6deeb]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full flex flex-col font-sans bg-white text-gray-800`}
       >
-        <header className="sm:mx-10 mx-4 mt-5">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <Image src={Logo} alt="Logo" width={50} height={50} />
-              <span className="text-3xl font-extrabold bg-gradient-to-r from-[#82AAFF] to-[#C792EA] bg-clip-text text-transparent">Buildfy</span>
+             <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-gray-200">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <Sparkles className="h-8 w-8 text-sky-500" />
+            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-500 to-indigo-500">Buildfy</span>
+          </Link>
+          <nav className="hidden md:flex items-center space-x-4">
+            <Link href="/features">
+              <Button variant="ghost" className="text-gray-700 hover:text-gray-900">Features</Button>
             </Link>
-            <Button
-              asChild
-              variant="outline"
-              className="hidden sm:inline-flex gap-2 border-[#5f7e97] text-[#d6deeb] hover:bg-[#1d3b53]"
-            >
+            <Link href="/pricing">
+              <Button variant="ghost" className="text-gray-700 hover:text-gray-900">Pricing</Button>
+            </Link>
+            <Link href="/buildfy">
+              <Button className="bg-gradient-to-r from-sky-500 to-indigo-500 text-white hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-sky-200 font-medium rounded-full px-6">
+                Try Now
+              </Button>
+            </Link>
+          </nav>
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-gray-900" asChild>
               <Link href="https://github.com/OmTun-Labs" target="_blank">
-                <GitHubLogoIcon className="size-4" />
-                GitHub
+                <Github className="h-5 w-5" />
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-gray-900" asChild>
+              <Link href="https://twitter.com/nutlope" target="_blank">
+                <Twitter className="h-5 w-5" />
               </Link>
             </Button>
           </div>
-        </header>
+        </div>
+      </header>
 
         <main className="grow flex flex-col">{children}</main>
 
-        <footer className="flex flex-col sm:flex-row items-center justify-between sm:px-10 px-4 pt-20 pb-6 gap-4 sm:gap-0 sm:py-3 text-[#637777] text-sm">
+        <footer className="flex flex-col sm:flex-row items-center justify-between sm:px-10 px-4 pt-20 pb-6 gap-4 sm:gap-0 sm:py-3 text-gray-500 text-sm">
           <p>
             Powered by{" "}
             <a
               href="https://omtunlabs.com"
               target="_blank"
-              className="font-bold hover:underline underline-offset-4 text-[#82AAFF]"
+              className="font-bold hover:underline underline-offset-4 text-blue-500"
             >
               Omtunlabs
             </a>
           </p>
           <div className="flex gap-4">
-            <Button asChild variant="ghost" className="gap-2 text-[#d6deeb] hover:bg-[#1d3b53]">
+            <Button asChild variant="ghost" className="gap-2 text-gray-700 hover:bg-gray-50">
               <Link href="https://github.com/OmTun-Labs" target="_blank">
                 <GitHubLogoIcon className="size-4" />
                 GitHub
               </Link>
             </Button>
-            <Button asChild variant="ghost" className="gap-2 text-[#d6deeb] hover:bg-[#1d3b53]">
+            <Button asChild variant="ghost" className="gap-2 text-gray-700 hover:bg-gray-50">
               <Link href="https://twitter.com/nutlope" target="_blank">
                 <TwitterLogoIcon className="size-4" />
                 Twitter

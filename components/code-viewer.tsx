@@ -1,53 +1,84 @@
-"use client";
+"use client"
 
-import * as shadcnComponents from "@/lib/shadcn";
-import { Sandpack } from "@codesandbox/sandpack-react";
+import * as shadcnComponents from "@/lib/shadcn"
+import { Sandpack } from "@codesandbox/sandpack-react"
 import {
   SandpackPreview,
   SandpackProvider,
-} from "@codesandbox/sandpack-react/unstyled";
-import { nightOwl } from "@codesandbox/sandpack-themes";
-import dedent from "dedent";
-import "./code-viewer.css";
+} from "@codesandbox/sandpack-react/unstyled"
+import { nightOwl } from "@codesandbox/sandpack-themes"
+import dedent from "dedent"
+import { useState } from "react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+import { Maximize2, Minimize2 } from "lucide-react"
 
 export default function CodeViewer({
   code,
   showEditor = false,
 }: {
-  code: string;
-  showEditor?: boolean;
+  code: string
+  showEditor?: boolean
 }) {
-  return showEditor ? (
-    <Sandpack
-      options={{
-        showNavigator: true,
-        editorHeight: "80vh",
-        showTabs: false,
-        ...sharedOptions,
-      }}
-      files={{
-        "App.tsx": code,
-        ...sharedFiles,
-      }}
-      {...sharedProps}
-    />
-  ) : (
-    <SandpackProvider
-      files={{
-        "App.tsx": code,
-        ...sharedFiles,
-      }}
-      className="flex h-full w-full grow flex-col justify-center bg-gray-900"
-      options={{ ...sharedOptions }}
-      {...sharedProps}
-    >
-      <SandpackPreview
-        className="flex h-full w-full grow flex-col justify-center p-4 md:pt-16 bg-gray-900"
-        showOpenInCodeSandbox={false}
-        showRefreshButton={false}
-      />
-    </SandpackProvider>
-  );
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen)
+  }
+
+  return (
+    <div className={`relative rounded-lg overflow-hidden ${isFullscreen ? 'fixed inset-0 z-50' : 'h-[80vh]'}`}>
+      {showEditor ? (
+        <Sandpack
+          options={{
+            showNavigator: true,
+            editorHeight: isFullscreen ? "100vh" : "80vh",
+            showTabs: false,
+            ...sharedOptions,
+          }}
+          files={{
+            "App.tsx": code,
+            ...sharedFiles,
+          }}
+          {...sharedProps}
+        />
+      ) : (
+        <SandpackProvider
+          files={{
+            "App.tsx": code,
+            ...sharedFiles,
+          }}
+          className="flex h-full w-full grow flex-col justify-center bg-white"
+          options={{ ...sharedOptions }}
+          {...sharedProps}
+        >
+          <Tabs defaultValue="preview" className="w-full h-full">
+            <div className="flex justify-between items-center p-2 bg-gray-50 border-b border-gray-200">
+              <TabsList className="bg-white shadow-sm">
+                <TabsTrigger value="preview" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">Preview</TabsTrigger>
+                <TabsTrigger value="code" className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">Code</TabsTrigger>
+              </TabsList>
+              <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
+                {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+              </Button>
+            </div>
+            <TabsContent value="preview" className="mt-0 h-full">
+              <SandpackPreview
+                className="flex h-full w-full grow flex-col justify-center p-4 md:pt-16 bg-white"
+                showOpenInCodeSandbox={false}
+                showRefreshButton={false}
+              />
+            </TabsContent>
+            <TabsContent value="code" className="mt-0 h-full">
+              <pre className="p-4 bg-white text-gray-800 overflow-auto h-full font-mono text-sm leading-relaxed">
+                <code>{code}</code>
+              </pre>
+            </TabsContent>
+          </Tabs>
+        </SandpackProvider>
+      )}
+    </div>
+  )
 }
 
 const sharedProps = {
@@ -93,13 +124,13 @@ const sharedProps = {
       vaul: "^0.9.1",
     },
   },
-} as const;
+} as const
 
 const sharedOptions = {
   externalResources: [
     "https://unpkg.com/@tailwindcss/ui/dist/tailwind-ui.min.css",
   ],
-};
+}
 
 const sharedFiles = {
   "/lib/utils.ts": shadcnComponents.utils,
@@ -142,16 +173,16 @@ const sharedFiles = {
   "/components/ui/use-toast.tsx": shadcnComponents.useToast,
   "/public/index.html": dedent`
     <!DOCTYPE html>
-    <html lang="en" class="dark">
+    <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Code Preview</title>
         <script src="https://cdn.tailwindcss.com"></script>
       </head>
-      <body class="bg-gray-900 text-gray-100">
+      <body class="bg-white text-gray-900">
         <div id="root"></div>
       </body>
     </html>
   `,
-};
+}
