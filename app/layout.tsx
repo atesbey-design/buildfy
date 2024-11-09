@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Image from "next/image";
@@ -16,30 +15,6 @@ let url = "https://www.buildfy.dev/";
 let ogimage = "https://www.buildfy.dev/og-image.png";
 let sitename = "buildfy.dev";
 let favicon = "/buildfy.png";
-
-export const metadata: Metadata = {
-  metadataBase: new URL(url),
-  title,
-  description,
-  icons: {
-    icon: favicon,
-  },
-  openGraph: {
-    images: [ogimage],
-    title,
-    description,
-    url: url,
-    siteName: sitename,
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: [ogimage],
-    title,
-    description,
-  },
-};
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -60,6 +35,39 @@ export default function RootLayout({
       <head>
         <PlausibleProvider domain="buildfy.dev" />
         <link rel="icon" href={favicon} />
+        <meta name="description" content={description} />
+        <meta name="keywords" content="screenshot to code, ai code generation, react components, web development, buildfy" />
+        <meta name="author" content="Buildfy Team" />
+        <meta name="creator" content="Buildfy" />
+        <meta name="publisher" content="Buildfy" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={url} />
+        
+        <meta property="og:image" content={ogimage} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={url} />
+        <meta property="og:site_name" content={sitename} />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={ogimage} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:site" content="@buildfy" />
+        <meta name="twitter:creator" content="@buildfy" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="google-site-verification" content="google-site-verification-code" />
+        <meta name="yandex-verification" content="yandex-verification-code" />
+        <meta name="msvalidate.01" content="microsoft-verification-code" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content={title} />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full flex flex-col font-sans bg-white text-gray-800`}
