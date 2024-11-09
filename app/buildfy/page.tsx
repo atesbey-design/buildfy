@@ -145,20 +145,20 @@ export default function UploadComponent() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,#f0f9ff,transparent)]" />
         <div className="absolute inset-0 bg-[length:50px_50px] bg-grid-blue-100/30 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#fff_70%,transparent_100%)]" />
       </div>
-
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col gap-4 sm:gap-8">
           <div className="space-y-4 sm:space-y-6">
             {imageUrl ? (
-              <div className="relative mt-2">
+              <div className="relative mt-2 p-4">
                 <div
-                  className="rounded-xl overflow-hidden shadow-lg"
-                  style={{ height: "auto", maxHeight: "600px" }}
+                  className="rounded-xl overflow-hidden shadow-lg mx-auto"
+                  style={{ maxWidth: "500px" }}
                 >
                   <img
                     alt="Screenshot"
                     src={imageUrl}
                     className="w-full h-full object-contain"
+                    style={{ maxHeight: "400px" }}
                   />
                 </div>
                 <button

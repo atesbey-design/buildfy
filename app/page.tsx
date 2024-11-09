@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { Github, Twitter, Upload, Sparkles, ChevronDown, Zap, Code, Cpu, Star, Heart, Rocket, ArrowRight, Globe, Shield, Users, MessageSquare } from "lucide-react"
+import { Github, Twitter, Upload, Sparkles, ChevronDown, Zap, Code, Cpu, Star, Heart, Rocket, ArrowRight, Globe, Shield, Users, MessageSquare, Play, Pause } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
@@ -92,6 +92,8 @@ export default function Component() {
   const [showDemo, setShowDemo] = useState(false)
   const [activeFeature, setActiveFeature] = useState(0)
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -148,6 +150,17 @@ export default function Component() {
     await new Promise(resolve => setTimeout(resolve, 2000))
     setGeneratedCode(demoCode)
     setIsLoading(false)
+  }
+
+  const toggleVideo = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause()
+      } else {
+        videoRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
   }
 
   useEffect(() => {
@@ -267,22 +280,77 @@ export default function Component() {
               </Button>
             </motion.div>
             
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div 
+              whileHover={{ scale: 1.05, y: -2 }} 
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
               <Button 
                 size="lg"
                 variant="outline"
-                className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-lg font-semibold rounded-full border-2 hover:bg-gray-50 flex items-center justify-center gap-3"
+                className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-lg font-semibold rounded-full border-2 hover:bg-gray-50/80 hover:border-indigo-500/50 flex items-center justify-center gap-3 backdrop-blur-sm transition-all duration-300 group"
+                onClick={toggleVideo}
               >
                 <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="text-indigo-500"
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="text-indigo-500 group-hover:text-indigo-600"
                 >
-                  ▶️
+                  {isPlaying ? 
+                    <Pause className="h-5 w-5 drop-shadow-md" /> : 
+                    <Play className="h-5 w-5 drop-shadow-md" />
+                  }
                 </motion.div>
-                Watch Demo
+                <span className="bg-gradient-to-r from-indigo-500 to-sky-500 bg-clip-text text-transparent group-hover:opacity-80">
+                  Watch Demo
+                </span>
               </Button>
             </motion.div>
+          </motion.div>
+
+          {/* Demo Video Section */}
+          <motion.div 
+            className="mt-16 sm:mt-24 relative max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl shadow-indigo-500/20"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <video
+              ref={videoRef}
+              className="w-full rounded-2xl shadow-[0_0_30px_rgba(99,102,241,0.3)]"
+              poster="/hero.svg"
+              onClick={toggleVideo}
+              muted
+            >
+              <source src="/demo.mov" type="video/mp4"  />
+              Your browser does not support the video tag.
+            </video>
+            {!isPlaying && (
+              <motion.div 
+                className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={toggleVideo}
+              >
+                <motion.div
+                  className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/30"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Play className="h-8 w-8 text-purple-600" />
+                </motion.div>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Trust badges */}
@@ -314,7 +382,6 @@ export default function Component() {
             </motion.div>
           </motion.div>
         </motion.div>
-
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center mb-16 sm:mb-24"
           variants={containerVariants}
@@ -385,7 +452,18 @@ export default function Component() {
                   <SelectValue placeholder="Select AI Model" />
                 </SelectTrigger>
                 <SelectContent className="bg-white/90 backdrop-blur-xl border-2 border-gray-200 text-gray-900">
-                  <SelectItem value="gemini">Gemini 1.5 Pro</SelectItem>
+                  <SelectItem value="gemini">
+                    <div className="flex items-center gap-2">
+                      <img src="/gemini.png" alt="Gemini" className="w-4 h-4" />
+                      Gemini 1.5 Pro
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="gemini-pro">
+                    <div className="flex items-center gap-2">
+                      <img src="/meta.svg" alt="Meta Llama" className="w-4 h-4" />
+                      Meta Llama 3.1
+                    </div>
+                  </SelectItem>
                   <SelectItem value="gpt4">GPT-4</SelectItem>
                   <SelectItem value="claude">Claude 3</SelectItem>
                 </SelectContent>
