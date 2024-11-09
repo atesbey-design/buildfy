@@ -54,7 +54,7 @@ const testimonials = [
   }
 ]
 
-const demoImage = "/demo-design.png"
+const demoImage = "/demo.png"
 const demoCode = `
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -87,7 +87,7 @@ export default function DemoComponent() {
 export default function Component() {
   const [isDragging, setIsDragging] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+  const [uploadedImage, setUploadedImage] = useState<string | null>("/demo.png")
   const [generatedCode, setGeneratedCode] = useState<string | null>(null)
   const [showDemo, setShowDemo] = useState(false)
   const [activeFeature, setActiveFeature] = useState(0)
@@ -110,7 +110,7 @@ export default function Component() {
           setGeneratedCode(demoCode)
           setIsLoading(false)
         }, 2000)
-      }, 1000)
+      }, 4000)
       return () => clearTimeout(timer)
     }
   }, [showDemo])
@@ -433,9 +433,10 @@ export default function Component() {
               {generatedCode ? (
                 <motion.div
                   key="code"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.5 }}
                   className="bg-white/90 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border-2 border-gray-200 shadow-xl"
                 >
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
@@ -468,9 +469,10 @@ export default function Component() {
               ) : (
                 <motion.div
                   key="preview"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.5 }}
                   className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 sm:p-8 border-2 border-gray-200 shadow-xl"
                 >
                   <Tabs defaultValue="how-it-works" className="w-full">
@@ -479,49 +481,87 @@ export default function Component() {
                       <TabsTrigger value="features">Features</TabsTrigger>
                     </TabsList>
                     <TabsContent value="how-it-works">
-                      <motion.div className="space-y-3 sm:space-y-4">
+                      <motion.div 
+                        className="grid grid-cols-1 gap-4"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                      >
                         {[
-                          "Upload your design screenshot or mockup",
-                          "Select your preferred AI model",
-                          "Click Generate to transform your design",
-                          "Get production-ready React components"
+                          {
+                            icon: "🎨",
+                            title: "Upload Design",
+                            description: "Drag & drop your design file"
+                          },
+                          {
+                            icon: "🤖",
+                            title: "AI Processing",
+                            description: "Our AI analyzes your design"
+                          },
+                          {
+                            icon: "⚡",
+                            title: "Code Generation",
+                            description: "Get production-ready code"
+                          },
+                          {
+                            icon: "🚀",
+                            title: "Deploy",
+                            description: "Use the code in your project"
+                          }
                         ].map((step, index) => (
                           <motion.div
                             key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                            variants={itemVariants}
+                            className="flex items-center gap-4 p-4 bg-gradient-to-r from-sky-50 to-indigo-50 rounded-xl hover:scale-105 transition-transform duration-300"
                           >
-                            <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm sm:text-base">
-                              {index + 1}
+                            <div className="text-2xl">{step.icon}</div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900">{step.title}</h4>
+                              <p className="text-sm text-gray-600">{step.description}</p>
                             </div>
-                            <p className="text-sm sm:text-base text-gray-700">{step}</p>
                           </motion.div>
                         ))}
                       </motion.div>
                     </TabsContent>
                     <TabsContent value="features">
-                      <div className="space-y-3 sm:space-y-4">
-                        <div className="grid gap-3 sm:gap-4">
-                          {[
-                            "🎨 Advanced Design Recognition",
-                            "⚡️ Real-time Preview",
-                            "📱 Responsive by Default",
-                            "🔄 Version Control Integration"
-                          ].map((feature, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: index * 0.1 }}
-                              className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors text-sm sm:text-base"
-                            >
-                              {feature}
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
+                      <motion.div 
+                        className="grid grid-cols-2 gap-4"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                      >
+                        {[
+                          {
+                            icon: "🎨",
+                            title: "Design Recognition",
+                            color: "bg-pink-100"
+                          },
+                          {
+                            icon: "⚡",
+                            title: "Real-time Preview",
+                            color: "bg-yellow-100"
+                          },
+                          {
+                            icon: "📱",
+                            title: "Responsive",
+                            color: "bg-green-100"
+                          },
+                          {
+                            icon: "🔄",
+                            title: "Version Control",
+                            color: "bg-blue-100"
+                          }
+                        ].map((feature, index) => (
+                          <motion.div
+                            key={index}
+                            variants={itemVariants}
+                            className={`${feature.color} p-4 rounded-xl text-center hover:scale-105 transition-transform duration-300`}
+                          >
+                            <div className="text-2xl mb-2">{feature.icon}</div>
+                            <div className="font-semibold">{feature.title}</div>
+                          </motion.div>
+                        ))}
+                      </motion.div>
                     </TabsContent>
                   </Tabs>
                 </motion.div>

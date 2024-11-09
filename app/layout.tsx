@@ -71,30 +71,17 @@ export default function RootLayout({
             <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-500 to-indigo-500">Buildfy</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-4">
-            <Link href="/features">
-              <Button variant="ghost" className="text-gray-700 hover:text-gray-900">Features</Button>
-            </Link>
+         
             <Link href="/pricing">
               <Button variant="ghost" className="text-gray-700 hover:text-gray-900">Pricing</Button>
             </Link>
+           
             <Link href="/buildfy">
               <Button className="bg-gradient-to-r from-sky-500 to-indigo-500 text-white hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-sky-200 font-medium rounded-full px-6">
                 Try Now
               </Button>
             </Link>
           </nav>
-          <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-gray-900" asChild>
-              <Link href="https://github.com/OmTun-Labs" target="_blank">
-                <Github className="h-5 w-5" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-gray-900" asChild>
-              <Link href="https://twitter.com/nutlope" target="_blank">
-                <Twitter className="h-5 w-5" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </header>
 
