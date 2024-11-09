@@ -110,10 +110,7 @@ export default function RootLayout({
               </Link>
             </Button>
             <Button asChild variant="ghost" className="gap-2 text-gray-700 hover:bg-gray-50">
-              <Link href="https://twitter.com/nutlope" target="_blank">
-                <TwitterLogoIcon className="size-4" />
-                Twitter
-              </Link>
+             
             </Button>
           </div>
         </footer>

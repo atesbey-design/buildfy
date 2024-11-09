@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "/components/ui/avatar";
 
 export const usageDocs = `
 <Avatar>
-  <AvatarImage src="https://github.com/nutlope.png" />
+  <AvatarImage src="https://github.com/omtunlabs.png" />
   <AvatarFallback>CN</AvatarFallback>
 </Avatar>
 `;
