@@ -1,13 +1,10 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import Image from "next/image";
 import Link from "next/link";
-import Logo from "@/public/buildfy.png";
 import { Button } from "@/components/ui/button";
 import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
-import PlausibleProvider from "next-plausible";
 import { Sparkles } from "lucide-react";
-import { Github, Twitter } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 
 let title = "Buildfy – Screenshot to code";
 let description = "Generate your next app with a screenshot";
@@ -33,7 +30,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
-        <PlausibleProvider domain="buildfy.dev" />
         <link rel="icon" href={favicon} />
         <meta name="description" content={description} />
         <meta name="keywords" content="screenshot to code, ai code generation, react components, web development, buildfy" />
@@ -121,6 +117,7 @@ export default function RootLayout({
             </Button>
           </div>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
