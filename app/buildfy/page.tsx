@@ -29,14 +29,8 @@ export default function UploadComponent() {
   const [status, setStatus] = useState<
     "initial" | "uploading" | "uploaded" | "creating" | "created"
   >("initial");
-  const [model, setModel] = useState(
-    [
-      { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro", free: true },
-      { id: "gpt-4", name: "GPT-4", free: false },
-      { id: "claude-3", name: "Claude 3", free: false },
-      { id: "palm-2", name: "PaLM 2", free: false },
-    ][0]
-  );
+  const [model, setModel] = useState("gemini-1.5-pro");
+  const [modelName, setModelName] = useState("Gemini 1.5 Pro");
   const [generatedCode, setGeneratedCode] = useState("");
   const [shadcn, setShadcn] = useState(true);
   const [buildingMessage, setBuildingMessage] = useState(
@@ -47,7 +41,7 @@ export default function UploadComponent() {
 
   const loadingMessages = [
     "Analyzing the image...",
-    "Identifying UI components...",
+    "Identifying UI components...", 
     "Generating React components...",
     "Applying Tailwind styles...",
     "Building your app...",
@@ -138,7 +132,7 @@ export default function UploadComponent() {
 
   function handleSampleImage() {
     setImageUrl(
-      "https://napkinsdev.s3.us-east-1.amazonaws.com/next-s3-uploads/be191fc8-149b-43eb-b434-baf883986c2c/appointment-booking.png"
+      "https://res.cloudinary.com/dlqsssui0/image/upload/v1731159642/fhsjpck62rzljzfoukil.png"
     );
     setImageSize({ width: 800, height: 600 }); // Sample image dimensions
     setStatus("uploaded");
@@ -217,44 +211,42 @@ export default function UploadComponent() {
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 text-gray-800">
-              <label className="whitespace-nowrap font-medium">AI Model:</label>
-              <Select
-                value={model.id}
-                onValueChange={(value) => {
-                  const selectedModel = [
-                    {
-                      id: "gemini-1.5-pro",
-                      name: "Gemini 1.5 Pro",
-                      free: true,
-                    },
-                    { id: "gpt-4", name: "GPT-4", free: false },
-                    { id: "claude-3", name: "Claude 3", free: false },
-                    { id: "palm-2", name: "PaLM 2", free: false },
-                  ].find((m) => m.id === value);
-                  if (selectedModel && selectedModel.free) {
-                    setModel(selectedModel);
-                  }
-                }}
-              >
-                <SelectTrigger className="w-full sm:w-auto bg-white text-gray-800 border-gray-200 shadow-sm hover:bg-gray-50">
-                  <img src="/gemini.png" alt="Gemini" className="size-5 mr-2" />
-                  <SelectValue placeholder={model.name} />
-                </SelectTrigger>
-                <SelectContent className="bg-white text-gray-800 border-gray-200">
-                  <SelectItem value="gemini-1.5-pro">Gemini 1.5 Pro</SelectItem>
-                  <SelectItem value="gpt-4" disabled className="opacity-50">
-                    GPT-4 (Pro)
-                  </SelectItem>
-                  <SelectItem value="claude-3" disabled className="opacity-50">
-                    Claude 3 (Pro)
-                  </SelectItem>
-                  <SelectItem value="palm-2" disabled className="opacity-50">
-                    PaLM 2 (Pro)
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 text-gray-800">
+                <label className="whitespace-nowrap font-medium">AI Model:</label>
+                <Select value={model} onValueChange={(value) => {
+                  setModel(value);
+                  const modelNames: {[key: string]: string} = {
+                    "gemini-1.5-pro": "Gemini 1.5 Pro",
+                    "meta-llama-3.1-8b-instruct": "Meta Llama 3.1 8B", 
+                    "gpt-4": "GPT-4 (Premium)",
+                    "claude-3": "Claude 3 (Premium)",
+                    "palm-2": "PaLM 2 (Premium)"
+                  };
+                  setModelName(modelNames[value]);
+                }}>
+                  <SelectTrigger className="w-full sm:w-auto bg-white text-gray-800 border-gray-200 shadow-sm hover:bg-gray-50">
+                    <img src="/gemini.png" alt="Gemini" className="size-5 mr-2" />
+                    <SelectValue placeholder={modelName} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white text-gray-800 border-gray-200">
+                    <SelectItem value="gemini-1.5-pro">
+                      Gemini 1.5 Pro
+                    </SelectItem>
+                    <SelectItem value="meta-llama-3.1-8b-instruct">
+                      Meta Llama 3.1 8B
+                    </SelectItem>
+                    <SelectItem value="gpt-4" disabled className="opacity-50">
+                      GPT-4 (Premium) 🔒
+                    </SelectItem>
+                    <SelectItem value="claude-3" disabled className="opacity-50">
+                      Claude 3 (Premium) 🔒
+                    </SelectItem>
+                    <SelectItem value="palm-2" disabled className="opacity-50">
+                      PaLM 2 (Premium) 🔒
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
             <TooltipProvider>
               <Tooltip>

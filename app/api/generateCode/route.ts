@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { HfInference } from "@huggingface/inference";
 import { z } from "zod";
 import shadcnDocs from "@/lib/shadcn-docs";
 import dedent from "dedent";
@@ -25,38 +26,78 @@ export async function POST(req: Request) {
     const { model, imageUrl, shadcn } = result.data;
     const codingPrompt = getCodingPrompt(shadcn);
 
-    // Initialize Google Generative AI
+    let descriptionFromModel = "";
+    let genAI;
+    let geminiModel;
+
+    // Initialize Google Generative AI for Gemini
     const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    genAI = new GoogleGenerativeAI(apiKey);
+    geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
-    // Fetch the image data
-    const imageResponse = await fetch(imageUrl);
-    if (!imageResponse.ok) {
-      throw new Error("Failed to fetch the image.");
-    }
-    
-    const imageArrayBuffer = await imageResponse.arrayBuffer();
-    const imageBuffer = Buffer.from(imageArrayBuffer);
-    const mimeType = imageResponse.headers.get("content-type") || "image/jpeg";
+    if (model === "meta-llama") {
+      const client = new HfInference(process.env.HUGGINGFACE_API_KEY || "");
+      let out = "";
 
-    // Generate initial description using the image
-    const initialResult = await geminiModel.generateContent([
-      { text: getDescriptionPrompt },
-      {
-        inlineData: {
-          data: imageBuffer.toString('base64'),
-          mimeType: mimeType
+      const stream = client.chatCompletionStream({
+        model: "meta-llama/Llama-3.2-11B-Vision-Instruct",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: getDescriptionPrompt
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: imageUrl
+                }
+              }
+            ]
+          }
+        ],
+        max_tokens: 500
+      });
+
+      for await (const chunk of stream) {
+        if (chunk.choices && chunk.choices.length > 0) {
+          const newContent = chunk.choices[0].delta.content;
+          out += newContent;
         }
       }
-    ]);
 
-    const descriptionFromGemini = initialResult.response.text();
+      descriptionFromModel = out;
+    } else {
+      // Fetch the image data
+      const imageResponse = await fetch(imageUrl);
+      if (!imageResponse.ok) {
+        throw new Error("Failed to fetch the image.");
+      }
+      
+      const imageArrayBuffer = await imageResponse.arrayBuffer();
+      const imageBuffer = Buffer.from(imageArrayBuffer);
+      const mimeType = imageResponse.headers.get("content-type") || "image/jpeg";
+
+      // Generate initial description using the image
+      const initialResult = await geminiModel.generateContent([
+        { text: getDescriptionPrompt },
+        {
+          inlineData: {
+            data: imageBuffer.toString('base64'),
+            mimeType: mimeType
+          }
+        }
+      ]);
+
+      descriptionFromModel = initialResult.response.text();
+    }
 
     // Generate code based on the description
     const codeResult = await geminiModel.generateContent([
       { text: codingPrompt },
-      { text: descriptionFromGemini + "\nPlease ONLY return code, NO backticks or language names." }
+      { text: descriptionFromModel + "\nPlease ONLY return code, NO backticks or language names." }
     ]);
 
     const textStream = new ReadableStream({
