@@ -29,8 +29,8 @@ export default function UploadComponent() {
   const [status, setStatus] = useState<
     "initial" | "uploading" | "uploaded" | "creating" | "created"
   >("initial");
-  const [model, setModel] = useState("gemini-1.5-pro");
-  const [modelName, setModelName] = useState("Gemini 1.5 Pro");
+  const [model, setModel] = useState("meta-llama-3.1-8b-instruct");
+  const [modelName, setModelName] = useState("Meta Llama 3.1 8B");
   const [generatedCode, setGeneratedCode] = useState("");
   const [shadcn, setShadcn] = useState(true);
   const [buildingMessage, setBuildingMessage] = useState(
@@ -216,8 +216,9 @@ export default function UploadComponent() {
                 <Select value={model} onValueChange={(value) => {
                   setModel(value);
                   const modelNames: {[key: string]: string} = {
-                    "gemini-1.5-pro": "Gemini 1.5 Pro",
                     "meta-llama-3.1-8b-instruct": "Meta Llama 3.1 8B", 
+                    "gemini-1.5-pro": "Gemini 1.5 Pro",
+                
                     "gpt-4": "GPT-4 (Premium)",
                     "claude-3": "Claude 3 (Premium)",
                     "palm-2": "PaLM 2 (Premium)"
@@ -229,12 +230,13 @@ export default function UploadComponent() {
                     <SelectValue placeholder={modelName} />
                   </SelectTrigger>
                   <SelectContent className="bg-white text-gray-800 border-gray-200">
+                  <SelectItem value="meta-llama-3.1-8b-instruct">
+                      Meta Llama 3.1 8B
+                    </SelectItem>
                     <SelectItem value="gemini-1.5-pro">
                       Gemini 1.5 Pro
                     </SelectItem>
-                    <SelectItem value="meta-llama-3.1-8b-instruct">
-                      Meta Llama 3.1 8B
-                    </SelectItem>
+              
                     <SelectItem value="gpt-4" disabled className="opacity-50">
                       GPT-4 (Premium) 🔒
                     </SelectItem>
