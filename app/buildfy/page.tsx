@@ -27,15 +27,16 @@ export default function UploadComponent() {
     { width: 0, height: 0 }
   );
   const [status, setStatus] = useState<
-    "initial" | "uploading" | "uploaded" | "creating" | "created"
+    "initial" | "uploading" | "uploaded" | "creating" | "created" | "error"
   >("initial");
-  const [model, setModel] = useState("meta-llama-3.1-8b-instruct");
+  const [model, setModel] = useState("meta-llama");
   const [modelName, setModelName] = useState("Meta Llama 3.1 8B");
   const [generatedCode, setGeneratedCode] = useState("");
   const [shadcn, setShadcn] = useState(true);
   const [buildingMessage, setBuildingMessage] = useState(
     "Reading the image..."
   );
+  const [errorMessage, setErrorMessage] = useState("");
 
   const loading = status === "creating";
 
@@ -116,7 +117,12 @@ export default function UploadComponent() {
         }),
       });
 
-      if (!res.ok) throw new Error(res.statusText);
+      if (!res.ok) {
+        if (res.status === 429) {
+          throw new Error("Too Many Requests");
+        }
+        throw new Error(res.statusText);
+      }
       if (!res.body) throw new Error("No response body");
 
       for await (const chunk of readStream(res.body)) {
@@ -126,7 +132,12 @@ export default function UploadComponent() {
       setStatus("created");
     } catch (error) {
       console.error("Generation error:", error);
-      setStatus("uploaded");
+      setStatus("error");
+      if (error instanceof Error && error.message === "Too Many Requests") {
+        setErrorMessage("Due to high demand, we've reached our capacity limit. Please try again in a few minutes. Thank you for your interest in our service!");
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again later.");
+      }
     }
   }
 
@@ -216,7 +227,7 @@ export default function UploadComponent() {
                 <Select value={model} onValueChange={(value) => {
                   setModel(value);
                   const modelNames: {[key: string]: string} = {
-                    "meta-llama-3.1-8b-instruct": "Meta Llama 3.1 8B", 
+                    "meta-llama": "Meta Llama 3.1 8B", 
                     "gemini-1.5-pro": "Gemini 1.5 Pro",
                 
                     "gpt-4": "GPT-4 (Premium)",
@@ -230,7 +241,7 @@ export default function UploadComponent() {
                     <SelectValue placeholder={modelName} />
                   </SelectTrigger>
                   <SelectContent className="bg-white text-gray-800 border-gray-200">
-                  <SelectItem value="meta-llama-3.1-8b-instruct">
+                  <SelectItem value="meta-llama">
                       Meta Llama 3.1 8B
                     </SelectItem>
                     <SelectItem value="gemini-1.5-pro">
@@ -381,6 +392,27 @@ export default function UploadComponent() {
                       Please wait while we process your design
                     </motion.p>
                   </motion.div>
+                </div>
+              </div>
+            ) : status === "error" ? (
+              <div className="relative h-[60vh] sm:h-[80vh] overflow-hidden rounded-lg border border-gray-200 bg-white/90 shadow-lg">
+                <div className="absolute inset-0 flex flex-col gap-6 items-center justify-center bg-white p-8 text-center">
+                  <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center">
+                    <XCircleIcon className="h-12 w-12 text-red-500" />
+                  </div>
+                  <div className="space-y-4 max-w-md">
+                    <h3 className="text-2xl font-bold text-gray-900">Oops!</h3>
+                    <p className="text-gray-600">{errorMessage}</p>
+                    <button
+                      onClick={() => {
+                        setStatus("uploaded");
+                        setErrorMessage("");
+                      }}
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Try Again
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : status === "created" && generatedCode ? (
