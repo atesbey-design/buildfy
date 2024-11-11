@@ -31,15 +31,91 @@ export async function POST(req: Request) {
     let geminiModel;
 
     // Initialize Google Generative AI for Gemini
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
+    let apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
     genAI = new GoogleGenerativeAI(apiKey);
     geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
     if (model === "meta-llama") {
-      const client = new HfInference(process.env.HUGGINGFACE_API_KEY || "");
+      let client = new HfInference(process.env.NEXT_PUBLIC_HF_API_KEY || "");
       let out = "";
+      let success = false;
 
-      const stream = client.chatCompletionStream({
+      try {
+        const stream = await client.chatCompletionStream({
+          model: "meta-llama/Llama-3.2-11B-Vision-Instruct",
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: getDescriptionPrompt
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: imageUrl
+                  }
+                }
+              ]
+            }
+          ],
+          max_tokens: 500
+        });
+
+        for await (const chunk of stream) {
+          if (chunk.choices && chunk.choices.length > 0) {
+            const newContent = chunk.choices[0].delta.content;
+            out += newContent;
+          }
+        }
+        success = true;
+      } catch (error) {
+        if (error.message?.includes("Too Many Requests")) {
+          // Try with backup API key
+          client = new HfInference(process.env.NEXT_PUBLIC_HF_API_KEY_2 || "");
+          const stream = await client.chatCompletionStream({
+            model: "meta-llama/Llama-3.2-11B-Vision-Instruct",
+            messages: [
+              {
+                role: "user",
+                content: [
+                  {
+                    type: "text",
+                    text: getDescriptionPrompt
+                  },
+                  {
+                    type: "image_url",
+                    image_url: {
+                      url: imageUrl
+                    }
+                  }
+                ]
+              }
+            ],
+            max_tokens: 500
+          });
+
+          for await (const chunk of stream) {
+            if (chunk.choices && chunk.choices.length > 0) {
+              const newContent = chunk.choices[0].delta.content;
+              out += newContent;
+            }
+          }
+          success = true;
+        } else {
+          throw error;
+        }
+      }
+
+      if (!success) {
+        throw new Error("Failed to get response from Hugging Face");
+      }
+
+      descriptionFromModel = out;
+
+      // Generate code based on the description using the same model
+      const codeStream = await client.chatCompletionStream({
         model: "meta-llama/Llama-3.2-11B-Vision-Instruct",
         messages: [
           {
@@ -47,28 +123,35 @@ export async function POST(req: Request) {
             content: [
               {
                 type: "text",
-                text: getDescriptionPrompt
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: imageUrl
-                }
+                text: codingPrompt + "\n" + descriptionFromModel + "\nPlease ONLY return code, NO backticks or language names."
               }
             ]
           }
         ],
-        max_tokens: 500
+        max_tokens: 2000
       });
 
-      for await (const chunk of stream) {
+      let codeOutput = "";
+      for await (const chunk of codeStream) {
         if (chunk.choices && chunk.choices.length > 0) {
           const newContent = chunk.choices[0].delta.content;
-          out += newContent;
+          codeOutput += newContent;
         }
       }
 
-      descriptionFromModel = out;
+      const textStream = new ReadableStream({
+        start(controller) {
+          controller.enqueue(codeOutput);
+          controller.close();
+        }
+      }).pipeThrough(new TextEncoderStream());
+
+      return new Response(textStream, {
+        headers: new Headers({
+          "Cache-Control": "no-cache",
+        }),
+      });
+
     } else {
       // Fetch the image data
       const imageResponse = await fetch(imageUrl);
@@ -80,38 +163,79 @@ export async function POST(req: Request) {
       const imageBuffer = Buffer.from(imageArrayBuffer);
       const mimeType = imageResponse.headers.get("content-type") || "image/jpeg";
 
-      // Generate initial description using the image
-      const initialResult = await geminiModel.generateContent([
-        { text: getDescriptionPrompt },
-        {
-          inlineData: {
-            data: imageBuffer.toString('base64'),
-            mimeType: mimeType
+      let initialResult;
+      let codeResult;
+      let success = false;
+
+      try {
+        // Generate initial description using the image
+        initialResult = await geminiModel.generateContent([
+          { text: getDescriptionPrompt },
+          {
+            inlineData: {
+              data: imageBuffer.toString('base64'),
+              mimeType: mimeType
+            }
           }
+        ]);
+
+        descriptionFromModel = initialResult.response.text();
+
+        // Generate code based on the description
+        codeResult = await geminiModel.generateContent([
+          { text: codingPrompt },
+          { text: descriptionFromModel + "\nPlease ONLY return code, NO backticks or language names." }
+        ]);
+
+        success = true;
+      } catch (error) {
+        if (error.message?.includes("Too Many Requests")) {
+          // Try with backup API key
+          apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY_2 || "";
+          genAI = new GoogleGenerativeAI(apiKey);
+          geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+
+          // Retry with backup key
+          initialResult = await geminiModel.generateContent([
+            { text: getDescriptionPrompt },
+            {
+              inlineData: {
+                data: imageBuffer.toString('base64'),
+                mimeType: mimeType
+              }
+            }
+          ]);
+
+          descriptionFromModel = initialResult.response.text();
+
+          codeResult = await geminiModel.generateContent([
+            { text: codingPrompt },
+            { text: descriptionFromModel + "\nPlease ONLY return code, NO backticks or language names." }
+          ]);
+
+          success = true;
+        } else {
+          throw error;
         }
-      ]);
-
-      descriptionFromModel = initialResult.response.text();
-    }
-
-    // Generate code based on the description
-    const codeResult = await geminiModel.generateContent([
-      { text: codingPrompt },
-      { text: descriptionFromModel + "\nPlease ONLY return code, NO backticks or language names." }
-    ]);
-
-    const textStream = new ReadableStream({
-      start(controller) {
-        controller.enqueue(codeResult.response.text());
-        controller.close();
       }
-    }).pipeThrough(new TextEncoderStream());
 
-    return new Response(textStream, {
-      headers: new Headers({
-        "Cache-Control": "no-cache",
-      }),
-    });
+      if (!success) {
+        throw new Error("Failed to get response from Gemini");
+      }
+
+      const textStream = new ReadableStream({
+        start(controller) {
+          controller.enqueue(codeResult.response.text());
+          controller.close();
+        }
+      }).pipeThrough(new TextEncoderStream());
+
+      return new Response(textStream, {
+        headers: new Headers({
+          "Cache-Control": "no-cache",
+        }),
+      });
+    }
 
   } catch (error) {
     console.error("Unexpected error:", error);
