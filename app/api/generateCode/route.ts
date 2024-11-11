@@ -70,7 +70,7 @@ export async function POST(req: Request) {
           }
         }
         success = true;
-      } catch (error) {
+      } catch (error: any) { // Type error fixed
         if (error.message?.includes("Too Many Requests")) {
           // Try with backup API key
           client = new HfInference(process.env.NEXT_PUBLIC_HF_API_KEY_2 || "");
@@ -188,7 +188,7 @@ export async function POST(req: Request) {
         ]);
 
         success = true;
-      } catch (error) {
+      } catch (error: any) { // Type error fixed
         if (error.message?.includes("Too Many Requests")) {
           // Try with backup API key
           apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY_2 || "";
