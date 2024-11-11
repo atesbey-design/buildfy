@@ -8,9 +8,9 @@ import { Analytics } from "@vercel/analytics/react";
 
 let title = "Buildfy – Screenshot to code";
 let description = "Generate your next app with a screenshot";
-let url = "https://www.buildfy.dev/";
-let ogimage = "https://www.buildfy.dev/og-image.png";
-let sitename = "buildfy.dev";
+let url = "https://buildfy.vercel.app/";
+let ogimage = "https://buildfy.vercel.app/buildfy.png";
+let sitename = "buildfy.vercel.app";
 let favicon = "/buildfy.png";
 
 const geistSans = localFont({
