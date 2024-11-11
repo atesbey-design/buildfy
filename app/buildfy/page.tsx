@@ -133,11 +133,7 @@ export default function UploadComponent() {
     } catch (error) {
       console.error("Generation error:", error);
       setStatus("error");
-      if (error instanceof Error && error.message === "Too Many Requests") {
-        setErrorMessage("Due to high demand, we've reached our capacity limit. Please try again in a few minutes. Thank you for your interest in our service!");
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again later.");
-      }
+      setErrorMessage("Oops! Thank you for your interest!");
     }
   }
 
@@ -397,13 +393,30 @@ export default function UploadComponent() {
             ) : status === "error" ? (
               <div className="relative h-[60vh] sm:h-[80vh] overflow-hidden rounded-lg border border-gray-200 bg-white/90 shadow-lg">
                 <div className="absolute inset-0 flex flex-col gap-6 items-center justify-center bg-white p-8 text-center">
-                  <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center">
-                    <XCircleIcon className="h-12 w-12 text-red-500" />
-                  </div>
-                  <div className="space-y-4 max-w-md">
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", bounce: 0.5 }}
+                    className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center"
+                  >
+                    <motion.div
+                      animate={{ rotate: [0, 10, -10, 0] }}
+                      transition={{ duration: 0.5, repeat: Infinity }}
+                    >
+                      <XCircleIcon className="h-12 w-12 text-red-500" />
+                    </motion.div>
+                  </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="space-y-4 max-w-md"
+                  >
                     <h3 className="text-2xl font-bold text-gray-900">Oops!</h3>
-                    <p className="text-gray-600">{errorMessage}</p>
-                    <button
+                    <p className="text-gray-600">Thank you for your interest!</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => {
                         setStatus("uploaded");
                         setErrorMessage("");
@@ -411,8 +424,8 @@ export default function UploadComponent() {
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       Try Again
-                    </button>
-                  </div>
+                    </motion.button>
+                  </motion.div>
                 </div>
               </div>
             ) : status === "created" && generatedCode ? (
